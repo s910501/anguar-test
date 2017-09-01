@@ -1,0 +1,110 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<fieldset>
+    <legend>为空里不报错，不显示</legend>
+    <div style="text-align:center">
+        <h1>
+            {{title}}!{{myHero?.name | uppercase}}<span [hidden]="isUnchanged">changed</span>
+        </h1>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>ngFor/trackBy减少DOM更新次数/Input/Output</legend>
+    <ul>
+        <li *ngFor="let hero of heroes;trackBy:trackByHeroes">{{hero.id}} {{hero.name}}</li>
+    </ul>
+    <ul>
+        <li *ngFor="let hero of heroes;let i=index">{{i}} {{hero.name}}</li>
+    </ul>
+    <p>component传递：</p>
+    <app-hero-detail *ngFor="let hero of heroes" [hero]="hero" [master]="master"></app-hero-detail>
+    <div (myClick)="clickMessage=$event" clickable>click with myClick</div>
+</fieldset>
+<fieldset>
+    <legend>ngSwitch</legend>
+    <div [ngSwitch]="currentHero.emotion">
+        <div *ngSwitchCase="'happy'">happy</div>
+        <div *ngSwitchCase="'sad'">sad</div>
+        <div *ngSwitchCase="'confused'">confused</div>
+        <div *ngSwitchDefault>default</div>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>ngIf</legend>
+    <p *ngIf="heroes.length > 3">many heroes{{1+1+ getVal()}}</p>
+</fieldset>
+
+
+<button [disabled]="isUnchanged">Cancel is disabled</button>
+
+<fieldset>
+    <legend>ngClass/attr</legend>
+    <div [ngClass]="classes1">[ngClass] binding to the classes property</div>
+    <div [class.special]="isSpecial" [class.specia2]="isSpecial">The class binding is special</div>
+
+    <tr>
+        <td [attr.colspan]="1 + 1">Three-Four</td>
+    </tr>
+</fieldset>
+<div (1myClick)="clickMessage=$event" clickable>click with myClick</div>
+<fieldset>
+    <legend>双向绑定</legend>
+    <input [value]="myHero.name" (input)="myHero.name=$event.target.value">
+    <input [(ngModel)]="myHero.name" type="text">
+    <input [ngModel]="myHero.name" (ngModelChange)="setUppercaseName($event)">
+</fieldset>
+
+<fieldset>
+    <legend>模板引用变量/#heroForm/可以用ref-前缀代替#</legend>
+    <input #phone placeholder="phone number">
+    <button (click)="callPhone(phone.value)">Call</button>
+
+    <form (ngSubmit)="onSubmit(heroForm)" #heroForm="ngForm">
+        <div class="form-group">
+            <label for="name">Name
+                <input class="form-control" name="name" required [(ngModel)]="myHero.name">
+              </label>
+        </div>
+        <button type="submit" [disabled]="!heroForm.form.valid">Submit</button>
+    </form>
+    <div [hidden]="!heroForm.form.valid">
+        {{submitMessage}}
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>组件传递</legend>
+    <button (click)="newMinor()">New minor version</button>
+    <button (click)="newMajor()">New major version</button>
+    <app-version-child [major]="major" [minor]="minor"></app-version-child>
+    <hr>
+    <h2>Output</h2>
+    <h3>Agree: {{agreed}}, Disagree: {{disagreed}}</h3>
+    <app-voter *ngFor="let voter of voters" [name]="voter" (onVoted)="onVoted1($event)">
+    </app-voter>
+    <hr>
+    <h3>本地变量互动</h3>
+    <h6>如果父组件的类需要读取子组件的属性值或调用子组件的方法，就不能使用本地变量方法</h6>
+    <button (click)="timer.start()">Start</button>
+    <button (click)="timer.stop()">Stop</button>
+    <div class="seconds">{{timer.seconds}}</div>
+    <app-countdown #timer></app-countdown>
+    <hr>
+    <button (click)="start()">Start</button>
+    <button (click)="stop()">Stop</button>
+    <div class="seconds">{{ seconds() }}</div>
+    <app-countdown></app-countdown>
+    <hr>
+    <h2>父组件和子组件通过服务来通讯</h2>
+    <button (click)="announce()">Announce mission</button>
+    <app-astronaut *ngFor="let astronaut of astronauts" [astronaut]="astronaut">
+    </app-astronaut>
+    <h3>History</h3>
+    <ul>
+        <li *ngFor="let event of history">{{event}}</li>
+    </ul>
+</fieldset>
+
+<div class="ad-banner">
+    <h3>Advertisements</h3>
+    <ng-template ad-host></ng-template>
+</div>
