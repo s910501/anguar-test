@@ -1,3 +1,4 @@
+//获取对容器视图的访问权
 import { Directive, ViewContainerRef } from '@angular/core';
 
 @Directive({

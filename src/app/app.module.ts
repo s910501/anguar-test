@@ -10,6 +10,13 @@ import { CountdownComponent } from './countdown/countdown.component';
 import { AstronautComponent } from './astronaut/astronaut.component';
 import { AdBannerComponent } from './ad-banner/ad-banner.component';
 
+import { HeroJobAdComponent }   from './ad-banner/hero-job-ad.component';
+import { HeroProfileComponent } from './ad-banner/hero-profile.component';
+import { AdDirective }          from './ad-banner/ad.directive';
+import { AdService }            from './ad-banner/ad.service';
+
+import { HighlightDirective } from './highlight.directive';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -18,13 +25,18 @@ import { AdBannerComponent } from './ad-banner/ad-banner.component';
     VoterComponent,
     CountdownComponent,
     AstronautComponent,
-    AdBannerComponent
+    AdBannerComponent,
+    HeroJobAdComponent,
+    HeroProfileComponent,
+    AdDirective,
+    HighlightDirective
   ],
   imports: [
     BrowserModule,
     FormsModule
   ],
-  providers: [],
+  providers: [AdService],
+  entryComponents: [ HeroJobAdComponent, HeroProfileComponent ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

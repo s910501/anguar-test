@@ -5,6 +5,11 @@ import { Hero } from './hero'
 
 import { MissionService } from './mission.service';
 
+import { AdService }         from './ad-banner/ad.service';
+import { AdItem }            from './ad-banner/ad-item';
+
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -12,6 +17,12 @@ import { MissionService } from './mission.service';
   providers: [MissionService]
 })
 export class AppComponent implements AfterViewInit {
+  submitMessage='';
+  clickMessage(){};
+  setUppercaseName(content){};
+  isUnchanged='';
+  onSubmit(submit){};
+  ads: AdItem[];
   currentHero={
     emotion:'happy'
   }
@@ -88,7 +99,7 @@ export class AppComponent implements AfterViewInit {
               'Fly to Vegas!'];
   nextMission = 0;
  
-  constructor(private missionService: MissionService) {
+  constructor(private missionService: MissionService,private adService: AdService) {
     missionService.missionConfirmed$.subscribe(
       astronaut => {
         this.history.push(`${astronaut} confirmed the mission`);
@@ -101,9 +112,11 @@ export class AppComponent implements AfterViewInit {
     this.history.push(`Mission "${mission}" announced`);
     if (this.nextMission >= this.missions.length) { this.nextMission = 0; }
   }
+  ngOnInit() {
+    this.ads = this.adService.getAds();
+  }
 
 
-
-  
+  color = 'yellow';
 
 }

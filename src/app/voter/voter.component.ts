@@ -12,11 +12,11 @@ export class VoterComponent implements OnInit {
   ngOnInit() {
   }
   @Input()  name: string;
-  @Output() onVoted2 = new EventEmitter<boolean>();
+  @Output() onVoted = new EventEmitter<boolean>();
   
   voted = false;
   vote(agreed:boolean){
-    this.onVoted2.emit(agreed);
+    this.onVoted.emit(agreed);
     this.voted = true;
   }
 }

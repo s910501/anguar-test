@@ -104,7 +104,26 @@
     </ul>
 </fieldset>
 
-<div class="ad-banner">
-    <h3>Advertisements</h3>
-    <ng-template ad-host></ng-template>
-</div>
+<fieldset>
+    <legend>动态组件</legend>
+    <div>
+        <p>app-ad-banner [ads]="ads"/app-ad-banner</p>
+    </div>
+</fieldset>
+
+<fieldset>
+    <legend>属性型指令</legend>
+    <div>
+        <input type="radio" name="colors" (click)="color='lightgreen'">Green
+        <input type="radio" name="colors" (click)="color='yellow'">Yellow
+        <input type="radio" name="colors" (click)="color='cyan'">Cyan
+        <p myHighlight>Highlight me!</p>
+        <p myHighlight myHighlight="yellow">Highlighted in yellow</p>
+        <p myHighlight [myHighlight]="'orange'">Highlighted in orange</p>
+        <p myHighlight [myHighlight]="color">Highlighted with parent component's color</p>
+        <p [myHighlight]="color">Highlight me!</p>
+        <p myHighlight defaultColor="violet">
+            Highlight me too!
+        </p>
+    </div>
+</fieldset>
