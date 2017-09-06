@@ -1,6 +1,9 @@
+import { ExponentialStrengthPipe } from './exponential-strength.pipe';
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms'
 import { NgModule } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { HeroDetailComponent } from './hero-detail/hero-detail.component';
@@ -16,9 +19,16 @@ import { AdDirective }          from './ad-banner/ad.directive';
 import { AdService }            from './ad-banner/ad.service';
 
 import { HighlightDirective } from './highlight.directive';
+import { HeroSwitchComponent } from './hero-switch/hero-switch.component';
+
+import { UnlessDirective }            from './unless.directive';
+import { FlyingHeroesPipe,FlyingHeroesImpurePipe } from './flying-heroes.pipe'
+import { FetchJsonPipe } from './fetch-json.pipe';
+import { HeroListComponent } from './hero-list/hero-list.component'
 
 @NgModule({
   declarations: [
+    
     AppComponent,
     HeroDetailComponent,
     VersionChildComponent,
@@ -29,11 +39,20 @@ import { HighlightDirective } from './highlight.directive';
     HeroJobAdComponent,
     HeroProfileComponent,
     AdDirective,
-    HighlightDirective
+    HighlightDirective,
+    HeroSwitchComponent,
+    UnlessDirective,
+    ExponentialStrengthPipe,
+    FlyingHeroesPipe,
+    FlyingHeroesImpurePipe,
+    FetchJsonPipe,
+    HeroListComponent
+
   ],
   imports: [
     BrowserModule,
-    FormsModule
+    FormsModule,
+    HttpModule,
   ],
   providers: [AdService],
   entryComponents: [ HeroJobAdComponent, HeroProfileComponent ],

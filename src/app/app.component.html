@@ -127,3 +127,156 @@
         </p>
     </div>
 </fieldset>
+<fieldset>
+    <legend>内置结构型指令 —— NgIf、NgFor和NgSwitch/</legend>
+    <ol>
+        <li>板输入变量和引用变量具有各自独立的命名空间。let hero中的hero和#hero中的hero并不是同一个变量。</li>
+        <li>NgIf引用的是指令的类名，而ngIf引用的是指令的属性名</li>
+        <li>我们在一个元素上只能放一个结构型指令。</li>
+        <li>NgSwitch本身不是结构型指令，而是一个属性型指令</li>
+        <li>NgSwitchCase 和 NgSwitchDefault 都是结构型指令</li>
+    </ol>
+    <div>
+        <div *ngIf="myHero">{{myHero.name}}</div>
+        <hr>
+        <ul>
+            <li *ngFor="let hero of heroes">{{hero.name}}</li>
+        </ul>
+        <hr>
+        <div [ngSwitch]="hero?.name">
+            <happy-hero *ngSwitchCase="'happy'" [hero]="hero"></happy-hero>
+            <sad-hero *ngSwitchCase="'sad'" [hero]="hero"></sad-hero>
+            <confused-hero *ngSwitchCase="'confused'" [hero]="hero"></confused-hero>
+            <unknown-hero *ngSwitchDefault [hero]="hero"></unknown-hero>
+        </div>
+        <hr>
+        <div *ngFor="let hero of heroes; let i=index; let odd=even; trackBy: trackByHeroes" [class.odd]="odd">
+            ({{i}}) {{hero.name}}
+        </div>
+        <hr>
+        <div [ngSwitch]="hero?.name">
+            <ng-template [ngSwitchCase]="'happy'">
+                <happy-hero [hero]="hero"></happy-hero>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'sad'">
+                <sad-hero [hero]="hero"></sad-hero>
+            </ng-template>
+            <ng-template [ngSwitchCase]="'confused'">
+                <confused-hero [hero]="hero"></confused-hero>
+            </ng-template>
+            <ng-template ngSwitchDefault>
+                <unknown-hero [hero]="hero"></unknown-hero>
+            </ng-template>
+        </div>
+        <hr>
+        <p>
+            I turned the corner
+            <ng-container *ngIf="hero">
+                and saw {{hero.name}}. I waved
+            </ng-container>
+            and continued on my way.
+        </p>
+        <hr>
+        <div>
+            Pick your favorite hero (
+            <label><input type="checkbox" checked (change)="showSad = !showSad">Tornado</label>)
+        </div>
+        <select [(ngModel)]="hero">
+                <ng-container *ngFor="let h of heroes">
+                  <ng-container *ngIf="showSad || h.name !== 'Tornado'">
+                    <option [ngValue]="h">{{h.name}} ({{h.id}})</option>
+                  </ng-container>
+                </ng-container>
+        </select>
+        <hr>
+        <p *myUnless="condition" class="unless a">
+            (A) This paragraph is displayed because the condition is false.
+        </p>
+
+        <p *myUnless="!condition" class="unless b">
+            (B) Although the condition is true, this paragraph is displayed because myUnless is set to false.
+        </p>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>管道</legend>
+    <p>The hero's birthday is {{ birthday | date }}</p>
+    <p>The hero's birthday is {{ birthday | date:"MM/dd/yy" }} </p>
+    <p>The hero's birthday is {{ birthday | date:format }}</p>
+    <button (click)="toggleFormat()">Toggle Format</button>
+    <p>The chained hero's birthday is {{ birthday | date | uppercase}}</p>
+    <p>The chained hero's birthday is {{ birthday | date:'fullDate' | uppercase}}</p>
+    <p>Super power boost: {{2 | exponentialStrength: 10}}</p>
+    <div>Normal power: <input [(ngModel)]="power"></div>
+    <div>Boost factor: <input [(ngModel)]="factor"></div>
+    <p>
+        Super Hero Power: {{power | exponentialStrength: factor}}
+    </p>
+    <hr>
+    <input type="text" #box (keyup.enter)="addHero(box.value); box.value='999'" placeholder="Enter添加英雄">
+    <button (click)="reset()">Reset</button>
+    <div *ngFor="let hero of (heroes2 | flyingHeroes)">
+        {{hero.name}}
+    </div>
+
+    <hr>
+    <ol>
+        <li>
+            Angular只有在它检测到输入值发生了纯变更时才会执行纯管道。 纯变更是指对原始类型值(String、Number、Boolean、Symbol)的更改， 或者对对象引用(Date、Array、Function、Object)的更改。 Angular会忽略(复合)对象内部的更改。
+        </li>
+        <li>如果我们更改了输入日期(Date)中的月份、往一个输入数组(Array)中添加新值或者更新了一个输入对象(Object)的属性，Angular都不会调用纯管道。</li>
+    </ol>
+    <p>
+        New hero:
+        <input type="text" #box2 (keyup.enter)="addHero(box2.value); box2.value=''" placeholder="hero name">
+        <input id="can-fly" type="checkbox" [(ngModel)]="canFly"> can fly
+    </p>
+    <p>
+        <input id="mutate" type="checkbox" [(ngModel)]="mutate">Mutate array
+        <button (click)="reset()">Reset</button>
+    </p>
+
+    <h4>Heroes2 who fly (piped)</h4>
+    <div *ngFor="let hero of (heroes2 | flyingHeroes)">
+        {{hero.name}}
+    </div>
+    <h4>All Heroes (no pipe)</h4>
+    <div *ngFor="let hero of heroes2">
+        {{hero.name}}
+    </div>
+    <hr>
+    <p>
+        New hero:
+        <input type="text" #box (keyup.enter)="addHero(box.value); box.value=''" placeholder="hero name">
+        <input id="can-fly" type="checkbox" [(ngModel)]="canFly"> can fly
+    </p>
+    <p>
+        <input id="mutate" type="checkbox" [(ngModel)]="mutate">Mutate array
+        <button (click)="reset()">Reset</button>
+    </p>
+
+    <h4>Heroes who fly (piped)</h4>
+    <div id="flyers">
+        <div *ngFor="let hero of (heroes2 | flyingHeroesImpure)">
+            {{hero.name}}
+        </div>
+    </div>
+
+    <h4>All Heroes (no pipe)</h4>
+    <div id="all">
+        <div *ngFor="let hero of heroes2">
+            {{hero.name}}
+        </div>
+    </div>
+    <hr>
+    <h2>非纯 AsyncPipe</h2>
+    <p>Message: {{ message$ | async }}</p>
+    <button (click)="resend()">Resend</button>
+    <hr>
+    <h2>一个非纯而且带缓存的管道</h2>
+    <div *ngFor="let hero of ('assets/heroes.json' | fetch) ">
+        {{hero.name}}
+    </div>
+    <p>Heroes as JSON: {{'assets/heroes.json' | fetch | json}}</p>
+</fieldset>
+<app-hero-list [heroes]=heroes></app-hero-list>

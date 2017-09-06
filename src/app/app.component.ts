@@ -1,14 +1,18 @@
 import { CountdownComponent } from './countdown/countdown.component';
-import { Component } from '@angular/core';
+import { Component,Input } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { Hero } from './hero'
+import { HEROES }                 from './heroes';
 
 import { MissionService } from './mission.service';
 
 import { AdService }         from './ad-banner/ad.service';
 import { AdItem }            from './ad-banner/ad-item';
 
-
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/observable/interval';
+import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/take';
 
 @Component({
   selector: 'app-root',
@@ -39,8 +43,10 @@ export class AppComponent implements AfterViewInit {
   ]
   master = 'Master   ';
   //master = '   ';
+  //解决重复数据遍历的错误
   trackByHeroes(index:number,hero:Hero):number{return hero.id}
   myHero = this.heroes[0];
+  hero = new Hero(1,'Windstorm');
   //constructor(){
     //this.title = 'Tour of Heroes';
     //this.myHero ='shenzm';
@@ -104,6 +110,8 @@ export class AppComponent implements AfterViewInit {
       astronaut => {
         this.history.push(`${astronaut} confirmed the mission`);
       });
+      this.reset();
+      this.resend();
   }
  
   announce() {
@@ -118,5 +126,45 @@ export class AppComponent implements AfterViewInit {
 
 
   color = 'yellow';
+  birthday = new Date(1988, 3, 15);
+  toggle = true; // start with true == shortDate
+  get format()   { return this.toggle ? 'shortDate' : 'fullDate'; }
+  toggleFormat() { this.toggle = !this.toggle; }
+
+
+  heroes2: any[] = [];
+  canFly = true;
+  mutate = true;
+
+  addHero(name: string) {
+    name = name.trim();
+    if (!name) { return; }
+    let hero = {name, canFly: this.canFly};
+    if (this.mutate) {
+      // Pure pipe won't update display because heroes array reference is unchanged
+      // Impure pipe will display
+      this.heroes2.push(hero);
+      } else {
+        // Pipe updates display because heroes array is a new object
+        this.heroes2 = this.heroes2.concat(hero);
+      }
+    //this.heroes2.push(hero);
+  }
+
+  reset() { this.heroes2 = HEROES.slice();}
+
+  message$: Observable<string>;
+  
+   private messages = [
+     'You are my hero!',
+     'You are the best hero!',
+     'Will you be my hero?'
+   ];
+  
+   resend() {
+     this.message$ = Observable.interval(500)
+       .map(i => this.messages[i])
+       .take(this.messages.length);
+   }
 
 }
