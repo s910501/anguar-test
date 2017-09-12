@@ -17,3 +17,26 @@
 .odd {
     background-color: palegoldenrod;
 }
+
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 5px solid #42A948;
+    /* green */
+}
+
+.ng-invalid:not(form) {
+    border-left: 5px solid #a94442;
+    /* red */
+}
+
+fieldset {
+    padding: .35em .625em .75em;
+    margin: 0 2px;
+    border: 1px solid silver
+}
+
+legend {
+    padding: .5em;
+    border: 0;
+    width: auto
+}

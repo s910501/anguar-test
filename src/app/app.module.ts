@@ -1,7 +1,7 @@
 import { ExponentialStrengthPipe } from './exponential-strength.pipe';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FormsModule } from '@angular/forms'
+import { FormsModule,ReactiveFormsModule } from '@angular/forms'
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
@@ -52,7 +52,9 @@ import { HeroListComponent } from './hero-list/hero-list.component'
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
+    BrowserAnimationsModule,
   ],
   providers: [AdService],
   entryComponents: [ HeroJobAdComponent, HeroProfileComponent ],

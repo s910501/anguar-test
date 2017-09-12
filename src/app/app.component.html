@@ -279,4 +279,144 @@
     </div>
     <p>Heroes as JSON: {{'assets/heroes.json' | fetch | json}}</p>
 </fieldset>
-<app-hero-list [heroes]=heroes></app-hero-list>
+<fieldset>
+    <legend>动画(跳过！！)</legend>
+    <div class="buttons">
+        <button [disabled]="!heroes_animate.canAdd()" (click)="heroes_animate.addInactive()">Add inactive hero</button>
+        <button [disabled]="!heroes_animate.canAdd()" (click)="heroes_animate.addActive()">Add active hero</button>
+        <button [disabled]="!heroes_animate.canRemove()" (click)="heroes_animate.remove()">Remove hero</button>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <h4>Basic State</h4>
+            <p>Switch between active/inactive on click.</p>
+
+        </div>
+    </div>
+</fieldset>
+<fieldset>
+    <legend>获取用户输入</legend>
+    <button (click)="onClickMe()">Click me!</button>{{clickMessage}}
+    <input (keyup)="onKey($event)">
+    <p>event:{{values}}</p>
+    <hr>
+    <input #box (keyup)="0">
+    <p>template:{{box.value}}</p>
+    <input #box2 (keyup)="onKey2(box2.value)">
+    <p>template:{{values}}</p>
+    <input #box3 (keyup.enter)="onEnter(box3.value)">
+    <input #box (keyup.enter)="update(box.value)" (blur)="update(box.value)">
+    <hr>
+</fieldset>
+<fieldset>
+    <legend>模板驱动的表单/表单验证</legend>
+    <div [hidden]="submitted">
+        <div class="container">
+            {{diagnostic}}
+            <form (ngSubmit)="studentSubmit()" #heroForm_t="ngForm">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" class="form-control" required id="name" name="name" required minlength="4" forbiddenName="bob" [(ngModel)]="model.name" #spy #name="ngModel">
+
+                    <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+                        <div *ngIf="name.errors.required">
+                            Name is required.
+                        </div>
+                        <div *ngIf="name.errors.minlength">
+                            Name must be at least 4 characters long.
+                        </div>
+                        <div *ngIf="name.errors.forbiddenName">
+                            Name cannot be Bob.没生效!!!
+                        </div>
+                    </div>
+                    <div [hidden]="name.valid || name.pristine" class="alert alert-danger">
+                        Name is required
+                    </div>
+                    <br>TODO: remove this: {{spy.className}}
+                </div>
+
+                <div class="form-group">
+                    <label for="alterEgo">Alter Ego</label>
+                    <input type="text" class="form-control" id="alterEgo" [(ngModel)]="model.alterEgo" name="alterEgo">
+                </div>
+
+                <div class="form-group">
+                    <label for="power">Hero Power</label>
+                    <select class="form-control" id="power" [(ngModel)]="model.power" name="power" required>
+                    <option *ngFor="let pow of powers" [value]="pow">{{pow}}</option>
+                </select>
+                </div>
+                <button type="submit" class="btn btn-success" [disabled]="!heroForm_t.form.valid">Submit</button>
+                <button type="button" class="btn btn-default" (click)="newStudent()">New Student</button>
+                <button type="button" class="btn btn-default" (click)="newStudent(); heroForm_t.reset()">New Student(reset css)</button>
+            </form>
+        </div>
+    </div>
+    <hr>
+    <div [hidden]="!submitted">
+        <h2>You submitted the following:</h2>
+        <div class="row">
+            <div class="col-xs-3">Name</div>
+            <div class="col-xs-9  pull-left">{{ model.name }}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">Alter Ego</div>
+            <div class="col-xs-9 pull-left">{{ model.alterEgo }}</div>
+        </div>
+        <div class="row">
+            <div class="col-xs-3">Power</div>
+            <div class="col-xs-9 pull-left">{{ model.power }}</div>
+        </div>
+        <br>
+        <button class="btn btn-primary" (click)="submitted=false">Edit</button>
+    </div>
+
+</fieldset>
+<fieldset>
+    <legend>响应式表单的验证/自定义验证器</legend>
+    <div class="container">
+        <form [formGroup]="heroForm2" #formDir="ngForm">
+            <div [hidden]="formDir.submitted">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input id="name" class="form-control" formControlName="name" required>
+                    <div *ngIf="name2.invalid && (name.dirty || name2.touched)" class="alert alert-danger">
+                        <div *ngIf="name2.errors.required">
+                            Name is required.
+                        </div>
+                        <div *ngIf="name2.errors.minlength">
+                            Name must be at least 4 characters long.
+                        </div>
+                        <div *ngIf="name2.errors.forbiddenName">
+                            Name cannot be Bob.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="alterEgo">Alter Ego</label>
+                    <input id="alterEgo" class="form-control" formControlName="alterEgo">
+                </div>
+
+                <div class="form-group">
+                    <label for="power">Hero Power</label>
+                    <select id="power" class="form-control" formControlName="power" required>
+                      <option *ngFor="let p of powers" [value]="p">{{p}}</option>
+                    </select>
+
+                    <div *ngIf="power.invalid && power.touched" class="alert alert-danger">
+                        <div *ngIf="power.errors.required">Power is required.</div>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-default" [disabled]="heroForm.invalid">Submit</button>
+                <button type="button" class="btn btn-default" (click)="formDir.resetForm({})">Reset</button>
+            </div>
+        </form>
+
+        <div class="submitted-message" *ngIf="formDir.submitted">
+            <p>You've submitted your hero, {{ heroForm.value.name }}!</p>
+            <button (click)="formDir.resetForm({})">Add new hero</button>
+        </div>
+    </div>
+</fieldset>

@@ -30,7 +30,9 @@ export class Heroes implements Iterable<Hero> {
   currentHeroes: Hero[] = [];
 
   [Symbol.iterator]() {
-    return this.currentHeroes.values();
+      console.log(this.currentHeroes);  
+      return this.currentHeroes.values();
+    //return this.currentHeroes.values();
   }
 
   canAdd() {
@@ -58,3 +60,10 @@ export class Heroes implements Iterable<Hero> {
   }
 
 }
+
+
+/*
+Copyright 2017 Google Inc. All Rights Reserved.
+Use of this source code is governed by an MIT-style license that
+can be found in the LICENSE file at http://angular.io/license
+*/

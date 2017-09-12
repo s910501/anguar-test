@@ -1,28 +1,32 @@
 import { CountdownComponent } from './countdown/countdown.component';
-import { Component,Input } from '@angular/core';
+import { Component,Input,OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { Hero } from './hero'
 import { HEROES }                 from './heroes';
-
+import { Heroes } from './hero-list/hero.service';
 import { MissionService } from './mission.service';
 
 import { AdService }         from './ad-banner/ad.service';
 import { AdItem }            from './ad-banner/ad-item';
+import { student }                 from './student';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 
+import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { forbiddenNameValidator } from './forbidden-name.directive';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [MissionService]
+  providers: [MissionService,Heroes]
 })
-export class AppComponent implements AfterViewInit {
+export class AppComponent implements AfterViewInit,OnInit {
   submitMessage='';
-  clickMessage(){};
+  //clickMessage(){};
   setUppercaseName(content){};
   isUnchanged='';
   onSubmit(submit){};
@@ -105,13 +109,14 @@ export class AppComponent implements AfterViewInit {
               'Fly to Vegas!'];
   nextMission = 0;
  
-  constructor(private missionService: MissionService,private adService: AdService) {
+  constructor(private missionService: MissionService,private adService: AdService,private heroes_animate: Heroes) {
     missionService.missionConfirmed$.subscribe(
       astronaut => {
         this.history.push(`${astronaut} confirmed the mission`);
       });
       this.reset();
       this.resend();
+      
   }
  
   announce() {
@@ -120,9 +125,7 @@ export class AppComponent implements AfterViewInit {
     this.history.push(`Mission "${mission}" announced`);
     if (this.nextMission >= this.missions.length) { this.nextMission = 0; }
   }
-  ngOnInit() {
-    this.ads = this.adService.getAds();
-  }
+
 
 
   color = 'yellow';
@@ -155,16 +158,65 @@ export class AppComponent implements AfterViewInit {
 
   message$: Observable<string>;
   
-   private messages = [
-     'You are my hero!',
-     'You are the best hero!',
-     'Will you be my hero?'
-   ];
-  
-   resend() {
-     this.message$ = Observable.interval(500)
-       .map(i => this.messages[i])
-       .take(this.messages.length);
-   }
+  private messages = [
+    'You are my hero!',
+    'You are the best hero!',
+    'Will you be my hero?'
+  ];
 
+  resend() {
+    this.message$ = Observable.interval(500)
+      .map(i => this.messages[i])
+      .take(this.messages.length);
+  }
+  clickMessage = '';
+   
+  onClickMe() {
+    this.clickMessage = 'You are my hero!';
+  }
+  values = '';
+  //onKey(event: any) { // without type info
+  //  //this.values += event.target.value + ' | ';
+  //  this.values += event.key + ' | ';
+  //}
+  onKey(event: KeyboardEvent) { // with type info
+    this.values += (<HTMLInputElement>event.target).value + ' | ';
+  }
+  onKey2(value: string) {
+    this.values += value + ' | ';
+  }
+  onEnter(value: string) { this.values  = value; }
+  update(value: string) { this.values = value; }
+
+  mystudent = new student(42,'SkyDog','Fetch any object at any distance','Leslie Rollover');
+
+  powers = ['Really Smart', 'Super Flexible',
+  'Super Hot', 'Weather Changer'];
+
+  model = new student(18, 'Dr IQ', this.powers[0], 'Chuck Overstreet');
+
+  submitted = false;
+  studentSubmit() { this.submitted = true; }
+
+  // TODO: Remove this when we're done
+  get diagnostic() { return JSON.stringify(this.model); }
+  newStudent() {
+    this.model = new student(42, '', '');
+  }
+  heroForm2: FormGroup;
+  
+  ngOnInit() {
+    this.ads = this.adService.getAds();
+    this.heroForm2 = new FormGroup({
+      'name': new FormControl(this.model.name, [
+        Validators.required,
+        Validators.minLength(4),
+        forbiddenNameValidator(/bob/i) // <-- Here's how you pass in the custom validator.
+      ]),
+      'alterEgo': new FormControl(this.model.alterEgo),
+      'power': new FormControl(this.model.power, Validators.required)
+    });
+  }
+  get name2() { return this.heroForm2.get('name'); }
+  get power() { return this.heroForm2.get('power'); }
 }
