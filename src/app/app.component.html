@@ -420,3 +420,122 @@
         </div>
     </div>
 </fieldset>
+<fieldset>
+    <legend>响应式表单</legend>
+    <label class="center-block">Just a FormControl:
+      <input class="form-control" [formControl]="reactive_name">
+    </label>
+    <form [formGroup]="reactive_heroForm" novalidate>
+        <div class="form-group">
+            <label class="center-block">FormControl in a FormGroup:
+                <input class="form-control" formControlName="name">
+              </label>
+        </div>
+    </form>
+    <p>Form value: {{ reactive_heroForm.value | json }}</p>
+    <p>Form status: {{ reactive_heroForm.status | json }}</p>
+    <form [formGroup]="reactive_bulder_heroForm" novalidate>
+        <div class="form-group">
+            <label class="center-block">FormControl in a FormBuilder:
+                    <input class="form-control" formControlName="name">
+                  </label>
+        </div>
+        <div formGroupName="address" class="well well-lg">
+            <div class="form-group">
+                <label class="center-block">Street:
+                  <input class="form-control" formControlName="street">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">City:
+                  <input class="form-control" formControlName="city">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">State:
+                  <select class="form-control" formControlName="state">
+                      <option *ngFor="let state of states" [value]="state">{{state}}</option>
+                  </select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">Zip Code:
+                  <input class="form-control" formControlName="zip">
+                </label>
+            </div>
+        </div>
+        <div class="form-group radio">
+            <h4>Super power:</h4>
+            <label class="center-block"><input type="radio" formControlName="power" value="flight">Flight</label>
+            <label class="center-block"><input type="radio" formControlName="power" value="x-ray vision">X-ray vision</label>
+            <label class="center-block"><input type="radio" formControlName="power" value="strength">Strength</label>
+        </div>
+        <div class="checkbox">
+            <label class="center-block">
+                  <input type="checkbox" formControlName="sidekick" name='a'>I have a sidekick.
+            </label>
+        </div>
+    </form>
+    <p>Form value: {{ reactive_bulder_heroForm.value | json }}</p>
+    <p>Form status: {{ reactive_bulder_heroForm.status | json }}</p>
+    <p>Form pristine: {{ reactive_bulder_heroForm.pristine | json }}</p>
+    <p>Form untouched: {{ reactive_bulder_heroForm.untouched | json }}</p>
+    <p>Street value: {{ reactive_bulder_heroForm.get('address.street').value}}</p>
+</fieldset>
+<fieldset>
+    <legend>响应式表单2</legend>
+    <nav>
+        <button (click)="getHeroes()" class="btn btn-primary">Refresh</button>
+        <a *ngFor="let teacher of teacherss" (click)="select(teacher)">{{teacher.name}}</a>
+    </nav>
+    <form [formGroup]="reactive_bulder_heroForm2" novalidate>
+        <div class="form-group">
+            <label class="center-block">FormControl in a FormBuilder:
+                        <input class="form-control" formControlName="name">
+                      </label>
+        </div>
+        <div formGroupName="address" class="well well-lg">
+            <div class="form-group">
+                <label class="center-block">Street:
+                      <input class="form-control" formControlName="street">
+                    </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">City:
+                      <input class="form-control" formControlName="city">
+                    </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">State:
+                      <select class="form-control" formControlName="state">
+                          <option *ngFor="let state of states" [value]="state">{{state}}</option>
+                      </select>
+                    </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">Zip Code:
+                      <input class="form-control" formControlName="zip">
+                    </label>
+            </div>
+        </div>
+    </form>
+    <p>Form value: {{ reactive_bulder_heroForm2.value | json }}</p>
+    <p>Form status: {{ reactive_bulder_heroForm2.status | json }}</p>
+    <p>Form pristine: {{ reactive_bulder_heroForm2.pristine | json }}</p>
+    <p>Form untouched: {{ reactive_bulder_heroForm2.untouched | json }}</p>
+</fieldset>
+<fieldset>
+    <legend>响应式表单2(onchange/service/array)</legend>
+    <nav>
+        <button (click)="getTeachers()" class="btn btn-primary">Refresh</button>
+        <a *ngFor="let teacher of teachers | async" (click)="select(teacher)">{{teacher.name}}</a>
+    </nav>
+
+    <div *ngIf="selectedTeacher">
+        <hr>
+        <h2>Hero Detail</h2>
+        <h3>Editing: {{selectedTeacher.name}}</h3>
+        <app-teacher-list [teacher]="selectedTeacher"></app-teacher-list>
+    </div>
+
+</fieldset>

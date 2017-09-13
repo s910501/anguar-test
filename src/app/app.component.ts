@@ -1,9 +1,10 @@
 import { CountdownComponent } from './countdown/countdown.component';
-import { Component,Input,OnInit } from '@angular/core';
+import { Component,Input,OnInit,OnChanges } from '@angular/core';
 import { AfterViewInit, ViewChild } from '@angular/core';
 import { Hero } from './hero'
 import { HEROES }                 from './heroes';
 import { Heroes } from './hero-list/hero.service';
+import { TeacherService } from './teacher-list/teacher.service';
 import { MissionService } from './mission.service';
 
 import { AdService }         from './ad-banner/ad.service';
@@ -11,12 +12,14 @@ import { AdItem }            from './ad-banner/ad-item';
 import { student }                 from './student';
 
 import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/finally';
 import 'rxjs/add/observable/interval';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/take';
 
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators,FormBuilder } from '@angular/forms';
 import { forbiddenNameValidator } from './forbidden-name.directive';
+import { states,Address,Teacher,teachers } from './data-model';
 
 @Component({
   selector: 'app-root',
@@ -24,7 +27,8 @@ import { forbiddenNameValidator } from './forbidden-name.directive';
   styleUrls: ['./app.component.css'],
   providers: [MissionService,Heroes]
 })
-export class AppComponent implements AfterViewInit,OnInit {
+export class AppComponent implements AfterViewInit,OnInit, OnChanges {
+  teachers: Observable<Teacher[]>;
   submitMessage='';
   //clickMessage(){};
   setUppercaseName(content){};
@@ -109,7 +113,10 @@ export class AppComponent implements AfterViewInit,OnInit {
               'Fly to Vegas!'];
   nextMission = 0;
  
-  constructor(private missionService: MissionService,private adService: AdService,private heroes_animate: Heroes) {
+  constructor(private missionService: MissionService,private adService: AdService,private heroes_animate: Heroes,
+    private fb: FormBuilder,private fb2: FormBuilder,private teacherService: TeacherService) {
+      this.createForm();
+      this.createForm2();
     missionService.missionConfirmed$.subscribe(
       astronaut => {
         this.history.push(`${astronaut} confirmed the mission`);
@@ -207,6 +214,7 @@ export class AppComponent implements AfterViewInit,OnInit {
   
   ngOnInit() {
     this.ads = this.adService.getAds();
+    this.getTeachers();    
     this.heroForm2 = new FormGroup({
       'name': new FormControl(this.model.name, [
         Validators.required,
@@ -219,4 +227,79 @@ export class AppComponent implements AfterViewInit,OnInit {
   }
   get name2() { return this.heroForm2.get('name'); }
   get power() { return this.heroForm2.get('power'); }
+
+  // 响应式表单
+  reactive_name = new FormControl();
+  reactive_heroForm = new FormGroup ({
+    name: new FormControl()
+  });
+
+  // FormBuilder.group是一个用来创建FormGroup的工厂方法
+  reactive_bulder_heroForm: FormGroup;
+  states = states;
+  createForm() {
+    this.reactive_bulder_heroForm = this.fb.group({
+      //name: '初始值', // <--- the FormControl called "name"
+      name: ['初始值',Validators.required],
+      address: this.fb.group({ // <-- the child FormGroup
+        street: '',
+        city: '',
+        state: '',
+        zip: ''
+      }),
+      //street: '',
+      //city: '',
+      //state: '',
+      //zip: '',
+      power: '',
+      sidekick: []
+    });
+  }
+
+  //
+   teacher: Teacher[] = [
+    {
+      id: 1,
+      name: 'Whirlwind',
+      addresses: [
+        {street: '123 Main',  city: 'Anywhere', state: 'CA',  zip: '94801'},
+        {street: '456 Maple', city: 'Somewhere', state: 'VA', zip: '23226'},
+      ]
+    }
+  ]
+  reactive_bulder_heroForm2: FormGroup;
+  states2 = states;
+  //teachers = teachers;
+  
+  selectedTeacher:Teacher;
+  createForm2() {
+    this.reactive_bulder_heroForm2 = this.fb2.group({
+      //name: '初始值', // <--- the FormControl called "name"
+      name: ['初始值',Validators.required],
+      address: this.fb2.group(new Address()),
+    });
+    // setValue 缺失值是会报错的
+    this.reactive_bulder_heroForm2.setValue({
+      name:    this.teacher[0].name,
+      address:  this.teacher[0].addresses[0]
+    });
+    // patchValue 缺失值是不会报错的
+    this.reactive_bulder_heroForm2.patchValue({
+      name: this.teacher[0].name
+    });
+  }
+  select(teacher: Teacher) { this.selectedTeacher = teacher;console.log(this.selectedTeacher); }
+  ngOnChanges() {
+    this.reactive_bulder_heroForm2.reset({
+      name: this.selectedTeacher.name
+    });
+  }
+  isLoading = false;
+  getTeachers() {
+    this.isLoading = true;
+    this.teachers = this.teacherService.getTeachers()
+                      // Todo: error handling
+                      .finally(() => this.isLoading = false);
+    this.selectedTeacher = undefined;
+  }
 }

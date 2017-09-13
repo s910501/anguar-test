@@ -1,0 +1,45 @@
+<form [formGroup]="reactive_bulder_heroForm" (ngSubmit)="onSubmit()" novalidate>
+    <div style="margin-bottom: 1em">
+        <button type="submit" [disabled]="reactive_bulder_heroForm.pristine" class="btn btn-success">Save</button> &nbsp;
+        <button type="reset" (click)="revert()" [disabled]="reactive_bulder_heroForm.pristine" class="btn btn-danger">Revert</button>
+    </div>
+    <div class="form-group">
+        <label class="center-block">FormControl in a FormBuilder:
+          <input class="form-control" formControlName="name">
+        </label>
+    </div>
+    <div formArrayName="secretLairs" class="well well-lg">
+        <div *ngFor="let address of secretLairs.controls; let i=index" [formGroupName]="i">
+            <h4>Address #{{i + 1}}</h4>
+            <div class="form-group">
+                <label class="center-block">Street:
+                  <input class="form-control" formControlName="street">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">City:
+                  <input class="form-control" formControlName="city">
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">State:
+                  <select class="form-control" formControlName="state">
+                      <option *ngFor="let state of states" [value]="state">{{state}}</option>
+                  </select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label class="center-block">Zip Code:
+                  <input class="form-control" formControlName="zip">
+                </label>
+            </div>
+        </div>
+        <button (click)="addLair()" type="button">Add a Secret Lair</button>
+    </div>
+</form>
+<p>Form value: {{ reactive_bulder_heroForm.value | json }}</p>
+<p>Form status: {{ reactive_bulder_heroForm.status | json }}</p>
+<p>Form pristine: {{ reactive_bulder_heroForm.pristine | json }}</p>
+<p>Form untouched: {{ reactive_bulder_heroForm.untouched | json }}</p>
+<h4>Name change log</h4>
+<div *ngFor="let name of nameChangeLog">{{name}}</div>

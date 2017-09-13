@@ -1,3 +1,4 @@
+
 import { ExponentialStrengthPipe } from './exponential-strength.pipe';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -17,6 +18,7 @@ import { HeroJobAdComponent }   from './ad-banner/hero-job-ad.component';
 import { HeroProfileComponent } from './ad-banner/hero-profile.component';
 import { AdDirective }          from './ad-banner/ad.directive';
 import { AdService }            from './ad-banner/ad.service';
+import { TeacherService } from './teacher-list/teacher.service';
 
 import { HighlightDirective } from './highlight.directive';
 import { HeroSwitchComponent } from './hero-switch/hero-switch.component';
@@ -24,7 +26,9 @@ import { HeroSwitchComponent } from './hero-switch/hero-switch.component';
 import { UnlessDirective }            from './unless.directive';
 import { FlyingHeroesPipe,FlyingHeroesImpurePipe } from './flying-heroes.pipe'
 import { FetchJsonPipe } from './fetch-json.pipe';
-import { HeroListComponent } from './hero-list/hero-list.component'
+import { HeroListComponent } from './hero-list/hero-list.component';
+import { QuestionBaseComponent } from './question-base/question-base.component';
+import { TeacherListComponent } from './teacher-list/teacher-list.component'
 
 @NgModule({
   declarations: [
@@ -46,7 +50,9 @@ import { HeroListComponent } from './hero-list/hero-list.component'
     FlyingHeroesPipe,
     FlyingHeroesImpurePipe,
     FetchJsonPipe,
-    HeroListComponent
+    HeroListComponent,
+    QuestionBaseComponent,
+    TeacherListComponent
 
   ],
   imports: [
@@ -56,7 +62,7 @@ import { HeroListComponent } from './hero-list/hero-list.component'
     HttpModule,
     BrowserAnimationsModule,
   ],
-  providers: [AdService],
+  providers: [AdService,TeacherService],
   entryComponents: [ HeroJobAdComponent, HeroProfileComponent ],
   bootstrap: [AppComponent]
 })
