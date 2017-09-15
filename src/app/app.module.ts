@@ -30,6 +30,9 @@ import { HeroListComponent } from './hero-list/hero-list.component';
 import { QuestionBaseComponent } from './question-base/question-base.component';
 import { TeacherListComponent } from './teacher-list/teacher-list.component'
 
+import { DynamicFormQuestionComponent } from './question-base/dynamic-form-question.component';
+import { ForbiddenValidatorDirective } from './forbidden-name.directive';
+
 @NgModule({
   declarations: [
     
@@ -52,7 +55,9 @@ import { TeacherListComponent } from './teacher-list/teacher-list.component'
     FetchJsonPipe,
     HeroListComponent,
     QuestionBaseComponent,
-    TeacherListComponent
+    TeacherListComponent,
+    DynamicFormQuestionComponent,
+    ForbiddenValidatorDirective
 
   ],
   imports: [

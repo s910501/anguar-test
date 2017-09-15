@@ -21,11 +21,13 @@ import { FormControl, FormGroup, Validators,FormBuilder } from '@angular/forms';
 import { forbiddenNameValidator } from './forbidden-name.directive';
 import { states,Address,Teacher,teachers } from './data-model';
 
+import { QuestionService } from './question-base/question.service';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [MissionService,Heroes]
+  providers: [MissionService,Heroes,QuestionService]
 })
 export class AppComponent implements AfterViewInit,OnInit, OnChanges {
   teachers: Observable<Teacher[]>;
@@ -112,11 +114,12 @@ export class AppComponent implements AfterViewInit,OnInit, OnChanges {
               'Fly to mars!',
               'Fly to Vegas!'];
   nextMission = 0;
- 
+  questions: any[];
   constructor(private missionService: MissionService,private adService: AdService,private heroes_animate: Heroes,
-    private fb: FormBuilder,private fb2: FormBuilder,private teacherService: TeacherService) {
+    private fb: FormBuilder,private fb2: FormBuilder,private teacherService: TeacherService,service: QuestionService) {
       this.createForm();
       this.createForm2();
+      this.questions = service.getQuestions();
     missionService.missionConfirmed$.subscribe(
       astronaut => {
         this.history.push(`${astronaut} confirmed the mission`);
