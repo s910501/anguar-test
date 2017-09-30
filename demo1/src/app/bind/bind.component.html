@@ -1,0 +1,54 @@
+<fieldset>
+  <legend>事件绑定</legend>
+  <button (click)="doOnClick($event)">Click</button>
+</fieldset>
+
+<fieldset>
+  <legend>插值绑定和属性绑定是一样的</legend>
+  <img [src]="imgUrl" alt="">
+  <img src="{{imgUrl}}" alt="">
+</fieldset>
+
+<fieldset>
+  <legend>HTML属性与Dom属性</legend>
+  <input type="text" value="Tom" (input)="doOnInput($event)">
+</fieldset>
+<fieldset>
+  <legend>有disabled属性时不管是否为False，都为禁用</legend>
+  <button disabled="false">点我</button>
+</fieldset>
+
+<fieldset>
+  <legend>HTML属性绑定</legend>
+  <table>
+    <tr><td [attr.colspan]="size">幕课网</td></tr>
+  </table>
+</fieldset>
+
+<fieldset>
+  <legend>CSS属性绑定</legend>
+  <div class="a b c">幕课网</div>
+  <div [class]="divClass">幕课网</div>
+  <div class="a" [class.c]="isBig">幕课网</div>
+  <div [ngClass]="divNgClass">幕课网</div>
+</fieldset>
+
+<fieldset>
+  <legend>Style属性绑定</legend>
+  <div [style.color]="isDev?'red':'blue'">幕课网</div>
+  <div [style.font-size.em]="isDev?3:1">幕课网</div>
+  <div [ngStyle]="divStyle">幕课网</div>
+</fieldset>
+
+<fieldset>
+  <legend>双向数据绑定(input等，div中是不行的)</legend>
+  手动双向绑定<input type="text" [value]="name" (input)="doOnInput1($event)">
+  <input [(ngModel)]="name">{{name}}
+</fieldset>
+
+<fieldset>
+  <legend>管道</legend>
+  {{date | date:'yyyy-MM-dd HH:mm:ss' | uppercase | lowercase}}
+  <p>{{pi | number:'2.1-4'}}</p>
+  <p>自定义管理{{size | multiple:10}}</p>
+</fieldset>
